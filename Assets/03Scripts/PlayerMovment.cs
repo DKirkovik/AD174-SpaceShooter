@@ -32,6 +32,9 @@ public class PlayerMovment : MonoBehaviour
     public GameObject playerDestroyAudioObj;
     private AudioSource playerDestroyAudioSource;
 
+    [Header ("Player Death Text")]
+    public GameObject youLost;
+
 
     #endregion
 
@@ -115,7 +118,8 @@ public class PlayerMovment : MonoBehaviour
 
     void OnDestroy() 
     {
-        playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);   
+        playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);
+        youLost.SetActive(true);   
         
     }
 

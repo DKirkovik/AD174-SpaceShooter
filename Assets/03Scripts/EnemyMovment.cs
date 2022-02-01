@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class EnemyMovment : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class EnemyMovment : MonoBehaviour
     [Header ("Enemy Stats")]
 
     public float lifeTime = 6f;
+    public float waitTime = 2f;
 
 
     #endregion
@@ -48,5 +50,22 @@ public class EnemyMovment : MonoBehaviour
         //Proc movment
         enemyTransform.position += new Vector3(0f,-speed *delTime,0f);
 
+    }
+
+    void OnCollisionEnter2D(Collision2D other) 
+    {
+        if(other.gameObject.tag == "Player"){
+            StartCoroutine(RestartCooldown());
+
+        }
+        
+    }
+
+
+    IEnumerator RestartCooldown()
+    {
+        //Restart timer
+        yield return new WaitForSeconds(waitTime);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

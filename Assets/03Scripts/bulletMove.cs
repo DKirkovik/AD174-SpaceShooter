@@ -15,6 +15,10 @@ public class bulletMove : MonoBehaviour
     public float lifeTime = 2f;
     public float waitTime = 0.15f;
 
+    [Header ("Bullet Score")]
+    public GameObject scoreManager;
+    public float scorePoints = 1f;
+
     #endregion
 
     [Header ("Bullet Audio")]
@@ -27,6 +31,7 @@ public class bulletMove : MonoBehaviour
         //Set Vars
         speed = normalSpeed;
         bulletAudio = GetComponent<AudioSource>();
+        scoreManager = GameObject.FindGameObjectWithTag("GameController");
 
     }
 
@@ -47,6 +52,8 @@ public class bulletMove : MonoBehaviour
             Destroy(other.gameObject);
             //Play Audio
             bulletAudio.PlayOneShot(bulletAudio.clip);
+            //Update score
+            scoreManager.GetComponent<ManageGame>().UpdateScore(scorePoints);
             //Destroy self after waitTime
             Destroy(this.gameObject,waitTime);
         }
