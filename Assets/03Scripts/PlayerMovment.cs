@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovment : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class PlayerMovment : MonoBehaviour
 
     [Header ("Movment Vars")]
     public float normalSpeed;
+    public float leftScreenEdge;
+    public float rightScreenEdge;
     private float speed;
     private Transform playerTrans;
     private Vector2 velocity;
@@ -24,6 +27,11 @@ public class PlayerMovment : MonoBehaviour
     private bool canShoot = true;
     private AudioSource ammAudioSource;
 
+    [Header ("Player Audio")]
+
+    public GameObject playerDestroyAudioObj;
+    private AudioSource playerDestroyAudioSource;
+
 
     #endregion
 
@@ -33,6 +41,7 @@ public class PlayerMovment : MonoBehaviour
         playerTrans = GetComponent<Transform>();
         speed = normalSpeed;
         ammAudioSource = fireSound.GetComponent<AudioSource>();
+        playerDestroyAudioSource = playerDestroyAudioObj.GetComponent<AudioSource>();
         
     }
 
@@ -65,10 +74,19 @@ public class PlayerMovment : MonoBehaviour
             SpawnBullet();
             StartCoroutine(ShootCooldwon());
         }
+
+
+        //Restart R
+        if (Input.GetKey("r"))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     void PorcMovment(float delTime)
     {
+        //Clamp X movment
+        playerTrans.position = new Vector3(Mathf.Clamp(playerTrans.position.x,leftScreenEdge,rightScreenEdge),playerTrans.position.y, playerTrans.position.z);
         //Calc movment
         playerTrans.position += new Vector3(velocity.x, velocity.y ,0f) * speed * delTime;
 
@@ -85,6 +103,20 @@ public class PlayerMovment : MonoBehaviour
         StartCoroutine(BulletCooldwon());
 
 
+    }
+
+    void OnCollisionEnter2D(Collision2D other) 
+    {
+        if(other.gameObject.tag == "Enemy"){
+            Destroy(this.gameObject);
+        }
+        
+    }
+
+    void OnDestroy() 
+    {
+        playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);   
+        
     }
 
     IEnumerator ShootCooldwon()
