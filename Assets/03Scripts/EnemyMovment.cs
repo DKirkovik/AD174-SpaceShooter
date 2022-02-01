@@ -12,6 +12,9 @@ public class EnemyMovment : MonoBehaviour
     private Transform enemyTransform;
     private float speed;
 
+    [Header ("Enemy Stats")]
+
+    public float lifeTime = 6f;
 
 
     #endregion
@@ -19,13 +22,21 @@ public class EnemyMovment : MonoBehaviour
 
     void  Awake() 
     {
+        //Set Vars
         speed = normalSpeed;
         enemyTransform = gameObject.transform;
         
     }
 
+    void Start() 
+    {
+        Destroy(this.gameObject,lifeTime);
+        
+    }
+
     void FixedUpdate() 
     {
+        //Movment
         ProcMovment(Time.fixedDeltaTime);
         
     }
@@ -34,6 +45,7 @@ public class EnemyMovment : MonoBehaviour
 
     void ProcMovment(float delTime)
     {
+        //Proc movment
         enemyTransform.position += new Vector3(0f,-speed *delTime,0f);
 
     }
