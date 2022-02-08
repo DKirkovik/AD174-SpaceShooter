@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class EnemyMovment : MonoBehaviour
 {
@@ -16,7 +15,6 @@ public class EnemyMovment : MonoBehaviour
     [Header ("Enemy Stats")]
 
     public float lifeTime = 6f;
-    public float waitTime = 2f;
 
 
     #endregion
@@ -32,6 +30,7 @@ public class EnemyMovment : MonoBehaviour
 
     void Start() 
     {
+        //Lifetime
         Destroy(this.gameObject,lifeTime);
         
     }
@@ -54,18 +53,14 @@ public class EnemyMovment : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) 
     {
+        //Destroy self on player hit
         if(other.gameObject.tag == "Player"){
-            StartCoroutine(RestartCooldown());
+            Destroy(this.gameObject);
 
         }
         
     }
 
 
-    IEnumerator RestartCooldown()
-    {
-        //Restart timer
-        yield return new WaitForSeconds(waitTime);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
+
 }

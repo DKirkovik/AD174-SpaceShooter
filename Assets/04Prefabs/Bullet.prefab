@@ -155,7 +155,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   normalSpeed: 10
   lifeTime: 1.5
-  waitTime: 0.15
+  waitTime: 0.1
+  scoreManager: {fileID: 0}
+  scorePoints: 1
 --- !u!61 &-6933932808153901086
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -34,11 +34,12 @@ public class PlayerMovment : MonoBehaviour
 
     [Header ("Player Death Text")]
     public GameObject youLost;
+    public GameObject GameManager;
 
 
     #endregion
 
-    void Awake() 
+    void Start() 
     {
         //Get vars
         playerTrans = GetComponent<Transform>();
@@ -82,7 +83,7 @@ public class PlayerMovment : MonoBehaviour
         //Restart R
         if (Input.GetKey("r"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            GameManager.GetComponent<ManageGame>().DeathSceneChange();
         }
     }
 
@@ -110,6 +111,7 @@ public class PlayerMovment : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) 
     {
+        //Destroy self on enemy hit
         if(other.gameObject.tag == "Enemy"){
             Destroy(this.gameObject);
         }
@@ -118,8 +120,19 @@ public class PlayerMovment : MonoBehaviour
 
     void OnDestroy() 
     {
-        playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);
-        youLost.SetActive(true);   
+        //If audio obj is null find it
+        if (playerDestroyAudioObj != null){
+            playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);
+
+        }
+        else{
+            playerDestroyAudioSource = playerDestroyAudioObj.GetComponent<AudioSource>();
+            playerDestroyAudioSource.PlayOneShot(playerDestroyAudioSource.clip);
+        }
+        
+        //Call scene change in game manager
+        youLost.SetActive(true);
+        GameManager.GetComponent<ManageGame>().DeathSceneChange();  
         
     }
 
@@ -139,4 +152,6 @@ public class PlayerMovment : MonoBehaviour
         GameObject rightAmmo = Instantiate(ammo, rightAim.transform.position, Quaternion.identity);
         rightAmmo.transform.parent = rightAmmoParent.transform; //Set parent
     }
+
+
 }
